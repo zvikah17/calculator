@@ -58,8 +58,7 @@ public class Parser {
 
     private Node parseT() {
         Node leftTerm = parseF();
-        while (tokenizer.nextToken().type == Token.Type.Multiply || tokenizer.nextToken().type == Token.Type.Divide ||
-                tokenizer.nextToken().type == Token.Type.Modulo) {
+        while (tokenizer.nextToken().type == Token.Type.Multiply || tokenizer.nextToken().type == Token.Type.Divide) {
             Token op = tokenizer.nextToken();
             tokenizer.next();
             Node rightTerm = parseF();
@@ -68,8 +67,6 @@ public class Parser {
                 leftTerm = new MultiplyNode(leftTerm, rightTerm);
             else if (op.type == Token.Type.Divide)
                 leftTerm = new DivideNode(leftTerm, rightTerm);
-            else
-                leftTerm = new ModuloNode(leftTerm, rightTerm);
         }
 
         return leftTerm;

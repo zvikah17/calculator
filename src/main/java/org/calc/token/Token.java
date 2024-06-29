@@ -27,7 +27,6 @@ public class Token {
         Minus("\\-"),
         Multiply("\\*"),
         Divide("/"),
-        Modulo("%"),
         Variable("[a-zA-Z]\\w*"),
         Error("[~`!@#$^&,<>.?]"),
         End("$");
