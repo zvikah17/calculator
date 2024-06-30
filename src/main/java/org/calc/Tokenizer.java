@@ -10,11 +10,9 @@ import java.util.regex.Pattern;
 public class Tokenizer {
     static private final Pattern pattern = Pattern.compile(regex());
     private final Matcher matcher;
-    private Token nextToken;
 
     public Tokenizer(String line) {
         matcher = pattern.matcher(line);
-        next();
     }
 
     static private String regex() {
@@ -25,19 +23,16 @@ public class Tokenizer {
         return buffer.substring(1);
     }
 
-    Token nextToken() {
-        return nextToken;
-    }
-
-    Tokenizer next() {
+    Token next() {
         //noinspection ResultOfMethodCallIgnored
         matcher.find();
 
+        Token token = null;
         for (Token.Type tokenType : Token.Type.values()) {
             String string = matcher.group(tokenType.name());
             if (string != null) {
                 int position = matcher.start();
-                nextToken = switch (tokenType) {
+                token = switch (tokenType) {
                     case Variable -> new VariableToken(string, position);
                     case Number -> new NumberToken(Integer.parseInt(string), position);
                     case Error -> throw new RuntimeException("Unexpected character '" + string + "' at " + position);
@@ -46,6 +41,6 @@ public class Tokenizer {
                 break;
             }
         }
-        return this;
+        return token;
     }
 }

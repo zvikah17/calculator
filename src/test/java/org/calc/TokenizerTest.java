@@ -25,10 +25,10 @@ class TokenizerTest {
     private static List<Token> getTokens(String string) {
         Tokenizer tokenizer = new Tokenizer(string);
         List<Token> tokens = new ArrayList<>();
-        Token token = tokenizer.nextToken();
+        Token token = tokenizer.next();
         while (token.type != Token.Type.End) {
             tokens.add(token);
-            token = tokenizer.next().nextToken();
+            token = tokenizer.next();
         }
         return tokens;
     }

@@ -14,6 +14,11 @@ public class Token {
         return type.name();
     }
 
+    public boolean isAssign() {
+        return type == Type.Assign || type == Type.AssignAdd || type == Type.AssignSubtract || type == Type.AssignMultiply ||
+                type == Type.AssignDivide;
+    }
+
     public enum Type {
         AssignAdd("\\+="),
         AssignSubtract("\\-="),
