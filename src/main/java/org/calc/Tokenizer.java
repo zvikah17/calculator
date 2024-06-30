@@ -36,11 +36,12 @@ public class Tokenizer {
         for (Token.Type tokenType : Token.Type.values()) {
             String string = matcher.group(tokenType.name());
             if (string != null) {
+                int position = matcher.start();
                 nextToken = switch (tokenType) {
-                    case Variable -> new VariableToken(string);
-                    case Number -> new NumberToken(Integer.parseInt(string));
-                    case Error -> throw new RuntimeException("Unexpected token " + string);
-                    default -> new Token(tokenType);
+                    case Variable -> new VariableToken(string, position);
+                    case Number -> new NumberToken(Integer.parseInt(string), position);
+                    case Error -> throw new RuntimeException("Unexpected character '" + string + "' at " + position);
+                    default -> new Token(tokenType, position);
                 };
                 break;
             }

@@ -18,7 +18,8 @@ class TokenizerTest {
 
     @Test
     void invalidTokens() {
-        assertThrows(RuntimeException.class, () -> getTokens("134- --<a_dd"));
+        Exception x = assertThrows(RuntimeException.class, () -> getTokens("134- --<a_dd"));
+        assertEquals("Unexpected character '<' at 7", x.getMessage());
     }
 
     private static List<Token> getTokens(String string) {

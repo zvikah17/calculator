@@ -24,20 +24,31 @@ public class Parser {
 
     private Node parseA() {
         if (tokenizer.nextToken().type != Token.Type.Variable)
-            throw new RuntimeException("variable expected at " /*+ token.position*/);
+            throw new RuntimeException("variable expected at " + tokenizer.nextToken().position);
         VariableToken variableToken = (VariableToken) tokenizer.nextToken();
         tokenizer.next();
 
-        if (tokenizer.nextToken().type != Token.Type.Assign) // TODO more ass
-            throw new RuntimeException("assignment expected at " /*+ token.position*/);
+        if (tokenizer.nextToken().type != Token.Type.Assign &&
+                tokenizer.nextToken().type != Token.Type.AssignAdd &&
+                tokenizer.nextToken().type != Token.Type.AssignSubtract &&
+                tokenizer.nextToken().type != Token.Type.AssignMultiply &&
+                tokenizer.nextToken().type != Token.Type.AssignDivide
+        )
+            throw new RuntimeException("assignment expected at " + tokenizer.nextToken().position);
         Token assignment = tokenizer.nextToken();
         tokenizer.next();
 
         Node expr = parseE();
         if (tokenizer.nextToken().type != Token.Type.End)
-            throw new RuntimeException("End expected at " /*+ token.position*/);
+            throw new RuntimeException("End expected at "  + tokenizer.nextToken().position);
 
-        return new AssignNode(variableToken.name, expr); // TODO more ass
+        return switch(assignment.type) {
+            case Assign -> new AssignNode(variableToken.name, expr);
+            case AssignAdd -> new AssignAddNode(variableToken.name, expr);
+            case AssignSubtract -> new AssignSubtractNode(variableToken.name, expr);
+            case AssignMultiply -> new AssignMultiplyNode(variableToken.name, expr);
+            default -> new AssignDivideNode(variableToken.name, expr);
+        };
     }
 
     private Node parseE() {
@@ -47,10 +58,9 @@ public class Parser {
             tokenizer.next();
             Node rightTerm = parseT();
 
-            if (op.type == Token.Type.Plus)
-                leftTerm = new AddNode(leftTerm, rightTerm);
-            else
-                leftTerm = new SubstractNode(leftTerm, rightTerm);
+            leftTerm =  (op.type == Token.Type.Plus)?
+                 new AddNode(leftTerm, rightTerm):
+                 new SubstractNode(leftTerm, rightTerm);
         }
 
         return leftTerm;
@@ -63,10 +73,9 @@ public class Parser {
             tokenizer.next();
             Node rightTerm = parseF();
 
-            if (op.type == Token.Type.Multiply)
-                leftTerm = new MultiplyNode(leftTerm, rightTerm);
-            else if (op.type == Token.Type.Divide)
-                leftTerm = new DivideNode(leftTerm, rightTerm);
+            leftTerm =  (op.type == Token.Type.Multiply)?
+                 new MultiplyNode(leftTerm, rightTerm):
+                 new DivideNode(leftTerm, rightTerm);
         }
 
         return leftTerm;
@@ -123,7 +132,8 @@ public class Parser {
                 tokenizer.next();
                 node = new NumberNode(value);
             }
-            default -> throw new RuntimeException("Unexpected token " + tokenizer.nextToken().type /* token.position*/);
+            default ->
+                    throw new RuntimeException("Unexpected token " + tokenizer.nextToken().type + " at " + tokenizer.nextToken().position);
         }
         return node;
     }

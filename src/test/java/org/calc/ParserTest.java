@@ -13,7 +13,7 @@ class ParserTest {
     @Test
     void parseError() {
         Exception exception = assertThrows(RuntimeException.class, () -> testExpression("a = 1 - * 2 + 3", 2));
-        assertEquals("Unexpected token Multiply", exception.getMessage());
+        assertEquals("Unexpected token Multiply at 8", exception.getMessage());
     }
 
     @Test

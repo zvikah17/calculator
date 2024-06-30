@@ -3,8 +3,8 @@ package org.calc.token;
 public class VariableToken extends Token {
     public final String name;
 
-    public VariableToken(String name) {
-        super(Type.Variable);
+    public VariableToken(String name, int position) {
+        super(Type.Variable, position);
         this.name = name;
     }
 

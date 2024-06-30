@@ -9,10 +9,14 @@ import java.util.Map;
 public class Calculator {
     Map<String, Double> calc(List<String> expressions) {
         Map<String, Double> context = new HashMap<>();
-        for (String expression: expressions) {
-            Parser parser = new Parser(expression);
-            Node node = parser.parse();
-            node.eval(context);
+        for (int i=0; i < expressions.size(); i++) {
+            Parser parser = new Parser(expressions.get(i));
+            try {
+                Node node = parser.parse();
+                node.eval(context);
+            } catch (Exception x) {
+                throw new RuntimeException("Line " + i + ": " + x.getMessage());
+            }
         }
         return context;
     }

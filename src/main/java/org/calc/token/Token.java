@@ -2,9 +2,11 @@ package org.calc.token;
 
 public class Token {
     public final Type type;
+    public final int position;
 
-    public Token(Type type) {
+    public Token(Type type, int position) {
         this.type = type;
+        this.position = position;
     }
 
     @Override
@@ -14,7 +16,7 @@ public class Token {
 
     public enum Type {
         AssignAdd("\\+="),
-        AssignDecrement("\\-="),
+        AssignSubtract("\\-="),
         AssignMultiply("\\*="),
         AssignDivide("/="),
         Assign("="),
