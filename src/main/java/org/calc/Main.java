@@ -15,8 +15,7 @@ public class Main {
                     Map<String, Double> result = calculator.calc(expressions);
                     System.out.println(result);
                 } catch (Exception x) {
-                    for (String ex : expressions) System.out.println(ex);
-                    System.out.println("Error: " + x.getMessage());
+                    System.out.println(x.getMessage());
                 }
                 expressions.clear();
             } else if (line.equals("$")) {
